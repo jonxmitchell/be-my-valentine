@@ -8,7 +8,7 @@ let placedHearts = []; // Tracks placed hearts to avoid overlap
 function positionHeartsRandomlyAvoidingOverlap() {
     const hearts = document.querySelectorAll('.heart');
     const containerRect = document.querySelector('.container').getBoundingClientRect();
-    placedHearts.push(containerRect); // Prevent hearts from overlapping the container
+    placedHearts.push(containerRect); // Include container in overlap checks
 
     hearts.forEach(heart => {
         let position;
@@ -69,7 +69,6 @@ function configureNoButton() {
     }
 
     noButton.addEventListener('mouseover', handleInteraction);
-    noButton.addEventListener('touchstart', handleInteraction, {passive: true});
 }
 
 function moveButtonAvoidingOverlap(buttonToMove, buttonToAvoid) {
