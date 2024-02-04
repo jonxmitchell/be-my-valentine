@@ -1,28 +1,58 @@
 document.addEventListener('DOMContentLoaded', function () {
-    positionHeartsRandomly();
+    positionHeartsRandomlyAvoidingContainer();
     configureNoButton();
 });
 
-function positionHeartsRandomly() {
+function positionHeartsRandomlyAvoidingContainer() {
     const hearts = document.querySelectorAll('.heart');
+    const container = document.querySelector('.container');
+    // Define a safe margin around the container where hearts won't be placed
+    const safeMargin = 100; // Adjust based on your layout
+
     hearts.forEach(heart => {
-        positionElementRandomly(heart);
+        let newX, newY, attempts = 0;
+        do {
+            newX = Math.random() * (window.innerWidth - heart.offsetWidth);
+            newY = Math.random() * (window.innerHeight - heart.offsetHeight);
+            attempts++;
+            // Prevent infinite loop
+            if (attempts > 100) break;
+        } while (isHeartOverlappingContainer(newX, newY, heart, container, safeMargin));
+
+        heart.style.position = 'fixed';
+        heart.style.left = `${newX}px`;
+        heart.style.top = `${newY}px`;
     });
 }
 
+function isHeartOverlappingContainer(x, y, heart, container, margin) {
+    const containerRect = container.getBoundingClientRect();
+    const expandedRect = {
+        top: containerRect.top - margin,
+        left: containerRect.left - margin,
+        right: containerRect.right + margin,
+        bottom: containerRect.bottom + margin
+    };
+
+    // Check if the heart's position is within the expanded container rect
+    return (
+        x < expandedRect.right &&
+        x + heart.offsetWidth > expandedRect.left &&
+        y < expandedRect.bottom &&
+        y + heart.offsetHeight > expandedRect.top
+    );
+}
+
 function configureNoButton() {
-    const noButton = document.querySelector('button:nth-of-type(2)');
-    const yesButton = document.querySelector('button:nth-of-type(1)');
+    const noButton = document.querySelector('#noButton'); // Updated selector to use ID
+    const yesButton = document.querySelector('#yesButton'); // Assuming the Yes button has an ID
     const messages = [
         "Oh no, try again!",
         "Oops... Missed me!",
         "Not this time!",
         "Try again!",
         "Maybe next time!",
-        "You know, there is a YES button there too right???",
-        "You can't catch me hehehehe",
-        "nuh uh, wrong answer, try again!!",
-        "naaaa you stuck with me, yes button is right there >:)"
+        // Add more messages as needed
     ];
 
     function handleInteraction() {
@@ -40,7 +70,7 @@ function moveButtonAvoidingOverlap(buttonToMove, buttonToAvoid) {
         newX = Math.random() * (window.innerWidth - buttonToMove.offsetWidth);
         newY = Math.random() * (window.innerHeight - buttonToMove.offsetHeight);
         attempts++;
-        // Avoid an infinite loop
+        // Prevent infinite loop
         if (attempts > 100) break;
     } while (isOverlapping(newX, newY, buttonToMove, buttonToAvoid));
 
@@ -67,12 +97,4 @@ function isOverlapping(newX, newY, movingButton, staticButton) {
 function changeButtonText(button, messages) {
     const messageIndex = Math.floor(Math.random() * messages.length);
     button.textContent = messages[messageIndex];
-}
-
-function positionElementRandomly(element) {
-    const maxX = window.innerWidth - element.offsetWidth;
-    const maxY = window.innerHeight - element.offsetHeight;
-    element.style.position = 'fixed';
-    element.style.left = `${Math.random() * maxX}px`;
-    element.style.top = `${Math.random() * maxY}px`;
 }
