@@ -6,6 +6,7 @@ body, html {
     align-items: center;
     background-color: pink;
     overflow: hidden; /* Prevents scrolling due to floating hearts */
+    position: relative; /* For absolute positioning of the No button */
 }
 
 body {
@@ -24,7 +25,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 20px;
     position: relative; /* Ensures it's above the hearts */
-    z-index: 1;
+    z-index: 2; /* Higher than the hearts */
 }
 
 h1 {
@@ -46,6 +47,7 @@ p {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    position: relative; /* For dynamic positioning */
 }
 
 .response-buttons button:hover {
