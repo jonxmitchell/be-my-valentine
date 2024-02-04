@@ -7,15 +7,18 @@ document.addEventListener('DOMContentLoaded', function () {
         "Not this time!",
         "Try again!",
         "Maybe next time!",
-        "You know there is a Yes button right there right??",
-        "Nuh uh, wrong answer, try again!"
         // Add your own custom messages here
     ];
 
-    noButton.addEventListener('mouseover', function () {
+    // Function to handle moving and changing text
+    function handleInteraction() {
         moveButtonWithinViewport(noButton);
         changeButtonText(noButton, messages);
-    });
+    }
+
+    // Respond to mouseover and touchstart events
+    noButton.addEventListener('mouseover', handleInteraction);
+    noButton.addEventListener('touchstart', handleInteraction, {passive: true});
 
     function moveButtonWithinViewport(button) {
         const viewportWidth = window.innerWidth;
@@ -38,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function changeButtonText(button, messages) {
-        // Randomly select a new message from the array
         const messageIndex = Math.floor(Math.random() * messages.length);
         button.textContent = messages[messageIndex];
     }
