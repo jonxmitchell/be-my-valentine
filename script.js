@@ -19,6 +19,10 @@ function configureNoButton() {
         "Not this time!",
         "Try again!",
         "Maybe next time!",
+        "You know, there is a YES button there too right???",
+        "You can't catch me hehehehe",
+        "nuh uh, wrong answer, try again!!",
+        "naaaa you stuck with me, yes button is right there >:)"
     ];
 
     function handleInteraction() {
