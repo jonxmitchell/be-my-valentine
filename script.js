@@ -1,58 +1,66 @@
 document.addEventListener('DOMContentLoaded', function () {
-    positionHeartsRandomlyAvoidingContainer();
+    positionHeartsRandomlyAvoidingOverlap();
     configureNoButton();
 });
 
-function positionHeartsRandomlyAvoidingContainer() {
+let placedHearts = []; // Tracks placed hearts to avoid overlap
+
+function positionHeartsRandomlyAvoidingOverlap() {
     const hearts = document.querySelectorAll('.heart');
-    const container = document.querySelector('.container');
-    // Define a safe margin around the container where hearts won't be placed
-    const safeMargin = 100; // Adjust based on your layout
+    const containerRect = document.querySelector('.container').getBoundingClientRect();
+    placedHearts.push(containerRect); // Prevent hearts from overlapping the container
 
     hearts.forEach(heart => {
-        let newX, newY, attempts = 0;
+        let position;
         do {
-            newX = Math.random() * (window.innerWidth - heart.offsetWidth);
-            newY = Math.random() * (window.innerHeight - heart.offsetHeight);
-            attempts++;
-            // Prevent infinite loop
-            if (attempts > 100) break;
-        } while (isHeartOverlappingContainer(newX, newY, heart, container, safeMargin));
-
+            position = getRandomPosition(heart.offsetWidth, heart.offsetHeight);
+        } while (isOverlappingAny(position, heart.offsetWidth, heart.offsetHeight));
+        
         heart.style.position = 'fixed';
-        heart.style.left = `${newX}px`;
-        heart.style.top = `${newY}px`;
+        heart.style.left = `${position.x}px`;
+        heart.style.top = `${position.y}px`;
+
+        // Save the heart's position for future overlap checks
+        placedHearts.push({
+            left: position.x,
+            top: position.y,
+            right: position.x + heart.offsetWidth,
+            bottom: position.y + heart.offsetHeight
+        });
     });
 }
 
-function isHeartOverlappingContainer(x, y, heart, container, margin) {
-    const containerRect = container.getBoundingClientRect();
-    const expandedRect = {
-        top: containerRect.top - margin,
-        left: containerRect.left - margin,
-        right: containerRect.right + margin,
-        bottom: containerRect.bottom + margin
+function getRandomPosition(width, height) {
+    return {
+        x: Math.random() * (window.innerWidth - width),
+        y: Math.random() * (window.innerHeight - height)
+    };
+}
+
+function isOverlappingAny(newPosition, width, height) {
+    const newRect = {
+        left: newPosition.x,
+        top: newPosition.y,
+        right: newPosition.x + width,
+        bottom: newPosition.y + height
     };
 
-    // Check if the heart's position is within the expanded container rect
-    return (
-        x < expandedRect.right &&
-        x + heart.offsetWidth > expandedRect.left &&
-        y < expandedRect.bottom &&
-        y + heart.offsetHeight > expandedRect.top
-    );
+    return placedHearts.some(placedRect => 
+        !(newRect.right < placedRect.left || 
+          newRect.left > placedRect.right || 
+          newRect.bottom < placedRect.top || 
+          newRect.top > placedRect.bottom));
 }
 
 function configureNoButton() {
-    const noButton = document.querySelector('#noButton'); // Updated selector to use ID
-    const yesButton = document.querySelector('#yesButton'); // Assuming the Yes button has an ID
+    const noButton = document.querySelector('#noButton');
+    const yesButton = document.querySelector('#yesButton');
     const messages = [
         "Oh no, try again!",
         "Oops... Missed me!",
         "Not this time!",
         "Try again!",
         "Maybe next time!",
-        // Add more messages as needed
     ];
 
     function handleInteraction() {
@@ -65,33 +73,29 @@ function configureNoButton() {
 }
 
 function moveButtonAvoidingOverlap(buttonToMove, buttonToAvoid) {
-    let newX, newY, attempts = 0;
+    let newX, newY;
     do {
         newX = Math.random() * (window.innerWidth - buttonToMove.offsetWidth);
         newY = Math.random() * (window.innerHeight - buttonToMove.offsetHeight);
-        attempts++;
-        // Prevent infinite loop
-        if (attempts > 100) break;
-    } while (isOverlapping(newX, newY, buttonToMove, buttonToAvoid));
+    } while (isOverlapping(newX, newY, buttonToMove.offsetWidth, buttonToMove.offsetHeight, buttonToAvoid.getBoundingClientRect()));
 
     buttonToMove.style.position = 'fixed';
     buttonToMove.style.left = `${newX}px`;
     buttonToMove.style.top = `${newY}px`;
 }
 
-function isOverlapping(newX, newY, movingButton, staticButton) {
-    const movingRect = movingButton.getBoundingClientRect();
-    movingRect.left = newX;
-    movingRect.top = newY;
-    movingRect.right = newX + movingButton.offsetWidth;
-    movingRect.bottom = newY + movingButton.offsetHeight;
+function isOverlapping(x, y, width, height, rectToAvoid) {
+    const newRect = {
+        left: x,
+        top: y,
+        right: x + width,
+        bottom: y + height
+    };
 
-    const staticRect = staticButton.getBoundingClientRect();
-
-    return !(movingRect.right < staticRect.left ||
-             movingRect.left > staticRect.right ||
-             movingRect.bottom < staticRect.top ||
-             movingRect.top > staticRect.bottom);
+    return !(newRect.right < rectToAvoid.left || 
+             newRect.left > rectToAvoid.right || 
+             newRect.bottom < rectToAvoid.top || 
+             newRect.top > rectToAvoid.bottom);
 }
 
 function changeButtonText(button, messages) {
