@@ -1,22 +1,37 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Position hearts in random locations
+    const hearts = document.querySelectorAll('.heart');
+    hearts.forEach(heart => {
+        const maxX = window.innerWidth - heart.offsetWidth;
+        const maxY = window.innerHeight - heart.offsetHeight;
+
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+
+        heart.style.position = 'fixed'; // Use 'fixed' for viewport-relative positioning
+        heart.style.left = `${randomX}px`;
+        heart.style.top = `${randomY}px`;
+    });
+
+    // Configuration for the "No" button
     const noButton = document.querySelector('button:nth-of-type(2)'); // Assuming it's the second button
-    // Array of custom messages for the No button
     const messages = [
         "Oh no, try again!",
         "Oops... Missed me!",
         "Not this time!",
         "Try again!",
         "Maybe next time!",
+        "You know, there is a YES button there too right???",
+        "You can't catch me hehehehe"
+
         // Add your own custom messages here
     ];
 
-    // Function to handle moving and changing text
     function handleInteraction() {
         moveButtonWithinViewport(noButton);
         changeButtonText(noButton, messages);
     }
 
-    // Respond to mouseover and touchstart events
     noButton.addEventListener('mouseover', handleInteraction);
     noButton.addEventListener('touchstart', handleInteraction, {passive: true});
 
