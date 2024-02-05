@@ -21,9 +21,15 @@ body {
     padding: 20px;
 }
 
+.hehebear{
+    width: 120px;
+  height: auto;
+}
+
 .container {
     width: 100%;
     max-width: 600px;
+    max-height: 700px; /* Adjust based on your needs */
     background-color: #ffecef;
     padding: 20px;
     border-radius: 15px;
@@ -31,9 +37,10 @@ body {
     margin: 20px;
     position: relative; /* Ensures it's above the hearts */
     z-index: 2; /* Higher than the hearts */
-    max-height: 500px; /* Adjust based on your needs */
-    overflow-y:auto;
-    scrollbar-width:none;
+    
+    overflow-y: auto;
+    scrollbar-width: none;
+
 }
 
 
