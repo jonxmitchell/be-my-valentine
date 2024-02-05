@@ -129,6 +129,8 @@ p {
     height: 90px;
     transform: rotate(-45deg);
     animation: float 8s ease-in-out infinite;
+    user-select: none;
+    pointer-events: none;
     z-index: 2;
 }
 
