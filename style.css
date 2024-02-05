@@ -128,7 +128,7 @@ p {
     width: 100px;
     height: 90px;
     transform: rotate(-45deg);
-    animation: float 5s ease-in-out infinite;
+    animation: float 8s ease-in-out infinite;
     z-index: 2;
 }
 
@@ -159,11 +159,11 @@ p {
 
     0%,
     100% {
-        transform: translateY(0) rotate(-45deg);
+        transform: translateY(0) rotate(0deg);
     }
 
     50% {
-        transform: translateY(-50px) rotate(-90deg);
+        transform: translateY(-50px) rotate(-360deg);
     }
 }
 
