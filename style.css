@@ -30,6 +30,9 @@ body {
     margin: 20px;
     position: relative; /* Ensures it's above the hearts */
     z-index: 2; /* Higher than the hearts */
+    max-height: 500px; /* Adjust based on your needs */
+    overflow-y:auto;
+    scrollbar-width:none;
 }
 
 
@@ -70,6 +73,7 @@ p {
     height: 90px;
     transform: rotate(-45deg);
     animation: float 5s ease-in-out infinite;
+    z-index: 2;
 }
 
 .heart::before,
