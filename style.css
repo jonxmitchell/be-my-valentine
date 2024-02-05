@@ -14,7 +14,7 @@ html {
     /* Prevents scrolling due to floating hearts */
     position: relative;
     /* For absolute positioning of the No button */
-    cursor: url("./img/icons8-pointer-25.png"), auto;
+    cursor: url("./img/ghost.png"), auto;
 }
 
 body {
@@ -153,15 +153,6 @@ p {
 #countdown {
     font-family: "Alkatra", cursive;
     font-size: 30px;
-    /* Ensures the content is not revealed until the animation */
-    overflow: hidden;
-    /* Keeps the content on a single line */
-    white-space: nowrap;
-    margin: 0 auto;
-    /* Adjust as needed */
-    animation:
-        typing 3.5s steps(40, end),
-        blink-caret .85s step-end infinite;
 }
 
 @keyframes float {
@@ -199,19 +190,27 @@ p {
     }
 }
 
-#heart1 {
+#heart1,
+#heart6,
+#heart8 {
     animation-delay: 0s
 }
 
-#heart2 {
+#heart2,
+#heart7,
+#heart11 {
     animation-delay: 2s
 }
 
-#heart3 {
+#heart3,
+#heart9,
+#heart13 {
     animation-delay: 1.5s
 }
 
-#heart5 {
+#heart5,
+#heart12,
+#heart14 {
     animation-delay: 1s
 }
 
