@@ -12,7 +12,7 @@ function positionHeartsRandomlyAvoidingOverlap() {
     const container = document.querySelector('.container');
     const containerRect = container.getBoundingClientRect();
     // Add a margin to avoid hearts too close to the container
-    const margin = 50;
+    const margin = 100;
     const expandedContainerRect = {
         top: containerRect.top - margin,
         right: containerRect.right + margin,
@@ -132,7 +132,7 @@ function updateContainerForValentine(isNewAcceptance = false) {
                                     <img src="./img/heart.gif" class="heart-gif" alt="heart gif">
                                 </h1>
                                <p>You've made me the happiest by accepting to be my Valentine. I look forward to our beautiful journey together.</p>
-                               <p>Make sure to return back to this site on Valentine's day ♥</p>
+                               <p>Make sure to return back to this site on Valentines day ♥</p>
                                <div id="countdown"></div>
                                <audio autoplay loop id="chipi-chipi">
                                 <source src="./audio/chipi-chipi.mp3">
@@ -213,3 +213,118 @@ function checkPreviousResponse() {
         updateContainerForValentine();
     }
 }
+
+particlesJS('particles-js',
+  
+  {
+    "particles": {
+      "number": {
+        "value": 66,
+        "density": {
+          "enable": true,
+          "value_area": 800
+        }
+      },
+      "color": {
+        "value": "#d186e8"
+      },
+      "shape": {
+        "type": "circle",
+        "stroke": {
+          "width": 2,
+          "color": "#d186e8"
+        },
+        "polygon": {
+          "nb_sides": 7
+        },
+        "image": {
+          "src": "img/github.svg",
+          "width": 100,
+          "height": 100
+        }
+      },
+      "opacity": {
+        "value": 0.5130918594769673,
+        "random": false,
+        "anim": {
+          "enable": false,
+          "speed": 1,
+          "opacity_min": 0.1,
+          "sync": false
+        }
+      },
+      "size": {
+        "value": 4.008530152163807,
+        "random": true,
+        "anim": {
+          "enable": false,
+          "speed": 40,
+          "size_min": 0.1,
+          "sync": false
+        }
+      },
+      "line_linked": {
+        "enable": true,
+        "distance": 150,
+        "color": "#6f8af2",
+        "opacity": 0.4,
+        "width": 1
+      },
+      "move": {
+        "enable": true,
+        "speed": 3,
+        "direction": "none",
+        "random": false,
+        "straight": false,
+        "out_mode": "out",
+        "bounce": false,
+        "attract": {
+          "enable": true,
+          "rotateX": 721.5354273894853,
+          "rotateY": 1200
+        }
+      }
+    },
+    "interactivity": {
+      "detect_on": "window",
+      "events": {
+        "onhover": {
+          "enable": true,
+          "mode": "repulse"
+        },
+        "onclick": {
+          "enable": true,
+          "mode": "bubble"
+        },
+        "resize": true
+      },
+      "modes": {
+        "grab": {
+          "distance": 400,
+          "line_linked": {
+            "opacity": 1
+          }
+        },
+        "bubble": {
+          "distance": 400,
+          "size": 40,
+          "duration": 1,
+          "opacity": 8,
+          "speed": 2
+        },
+        "repulse": {
+          "distance": 200,
+          "duration": 0.4
+        },
+        "push": {
+          "particles_nb": 4
+        },
+        "remove": {
+          "particles_nb": 2
+        }
+      }
+    },
+    "retina_detect": true
+  }
+
+);
