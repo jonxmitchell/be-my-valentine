@@ -8,9 +8,10 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: pink;
+    background-color: #fac9e7;
     overflow: hidden; /* Prevents scrolling due to floating hearts */
     position: relative; /* For absolute positioning of the No button */
+    cursor: url("./img/icons8-pointer-25.png"), auto;
 }
 
 body {
@@ -57,11 +58,26 @@ p {
     border-radius: 5px;
     background-color: #ff66b3;
     color: white;
-    font-size: 16px;
-    cursor: pointer;
+    font-size: 22px;
     transition: background-color 0.3s ease;
     position: relative; /* For dynamic positioning */
+    cursor: url("./img/pointer.png"), auto;
 }
+
+.main {
+    background: url("./img/petals-falling.gif"), #fac9e7;
+    background-size: 35%;
+    color: var(--pink);
+    font-family: "Happy Font";
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
 
 .response-buttons button:hover {
     background-color: #cc0052;
@@ -94,12 +110,17 @@ p {
     left: -50px;
 }
 
+#countdown {
+    font-family: "Alkatra", cursive;
+    font-size: 30px;
+}
+
 @keyframes float {
     0%, 100% {
         transform: translateY(0) rotate(-45deg);
     }
     50% {
-        transform: translateY(-20px) rotate(-45deg);
+        transform: translateY(-50px) rotate(-90deg);
     }
 }
 
