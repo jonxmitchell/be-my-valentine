@@ -31,7 +31,7 @@
 
         <!-- particles.js container -->
         <div id="particles-js"></div>
-
+        <audio src="./audio/chimes.mp3" autoplay="autoplay" loop="loop"></audio>
         <div class="container">
             <img src="./img/hehehehe.gif" alt="hehehehe" class="hehebear">
             <p>Dearest Aiydan,</p>
@@ -42,15 +42,20 @@
             </h1>
             <!-- Response Buttons -->
             <div class="response-buttons">
-                <button id="yesButton">Yes</button>
+                <button id="yesButton" onclick="playAudio('./audio/success-bell.mp3')">Yes</button>
                 <button id="noButton">No</button>
             </div>
         </div>
     </div>
     </div>
     <script src="./particles.js"></script>
-
     <script src="script.js"></script>
+    <script>
+        function playAudio(url) {
+            new Audio(url).play();
+        }
+
+    </script>
 </body>
 
 </html>
