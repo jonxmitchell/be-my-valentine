@@ -128,8 +128,11 @@ function updateContainerForValentine(isNewAcceptance = false) {
     if (isNewAcceptance) {
         
         container.innerHTML = `<img src="./img/chipi-chipi-chapa-chapa-chipi.gif" class="chipi-chipi-chapa-chapa-chipi-gif" alt="chipi chipi chapa chapa chipi gif">
+                               <h1 class="title"> <img src="./img/heart.gif" class="heart-gif" alt="heart gif"> YAAAAAAAAAAAAAAY!
+                                    <img src="./img/heart.gif" class="heart-gif" alt="heart gif">
+                                </h1>
                                <p>You've made me the happiest by accepting to be my Valentine. I look forward to our beautiful journey together.</p>
-                               <p>Make sure to return back to this site on Valentines day ♥</p>
+                               <p>Make sure to return back to this site on Valentine's day ♥</p>
                                <div id="countdown"></div>
                                <audio autoplay loop id="chipi-chipi">
                                 <source src="./audio/chipi-chipi.mp3">
