@@ -5,30 +5,31 @@ document.addEventListener('DOMContentLoaded', function () {
     checkPreviousResponse();
 });
 
-let placedHearts = []; // Tracks placed hearts to avoid overlap
+let placedHearts = []; // Tracks placed hearts and container bounds to avoid overlap
 
 function positionHeartsRandomlyAvoidingOverlap() {
     const hearts = document.querySelectorAll('.heart');
-    const containerRect = document.querySelector('.container').getBoundingClientRect();
-    placedHearts.push(containerRect); // Include container in overlap checks
+    const container = document.querySelector('.container');
+    const containerRect = container.getBoundingClientRect();
+    // Add a margin to avoid hearts too close to the container
+    const margin = 10;
+    const expandedContainerRect = {
+        top: containerRect.top - margin,
+        right: containerRect.right + margin,
+        bottom: containerRect.bottom + margin,
+        left: containerRect.left - margin,
+    };
+    placedHearts.push(expandedContainerRect); // Consider container in overlap checks
 
     hearts.forEach(heart => {
         let position;
         do {
             position = getRandomPosition(heart.offsetWidth, heart.offsetHeight);
-        } while (isOverlappingAny(position, heart.offsetWidth, heart.offsetHeight));
+        } while (isOverlappingAny(position, heart.offsetWidth, heart.offsetHeight) || isOverlappingContainer(position, heart.offsetWidth, heart.offsetHeight, expandedContainerRect));
         
         heart.style.position = 'fixed';
         heart.style.left = `${position.x}px`;
         heart.style.top = `${position.y}px`;
-
-        // Save the heart's position for future overlap checks
-        placedHearts.push({
-            left: position.x,
-            top: position.y,
-            right: position.x + heart.offsetWidth,
-            bottom: position.y + heart.offsetHeight
-        });
     });
 }
 
@@ -54,9 +55,23 @@ function isOverlappingAny(newPosition, width, height) {
           newRect.top > placedRect.bottom));
 }
 
+function isOverlappingContainer(newPosition, width, height, containerRect) {
+    // Check if the heart's position overlaps with the expanded container area
+    const heartRect = {
+        left: newPosition.x,
+        right: newPosition.x + width,
+        top: newPosition.y,
+        bottom: newPosition.y + height,
+    };
+
+    return !(heartRect.right < containerRect.left || 
+             heartRect.left > containerRect.right || 
+             heartRect.bottom < containerRect.top || 
+             heartRect.top > containerRect.bottom);
+}
+
 function configureNoButton() {
     const noButton = document.querySelector('#noButton');
-    const yesButton = document.querySelector('#yesButton');
     const messages = [
         "Oh no, try again!",
         "Oops... Missed me!",
@@ -66,37 +81,21 @@ function configureNoButton() {
     ];
 
     noButton.addEventListener('mouseover', function() {
-        moveButtonAvoidingOverlap(noButton, yesButton);
+        moveButtonAvoidingOverlap(noButton);
         changeButtonText(noButton, messages);
     });
 }
 
-function moveButtonAvoidingOverlap(buttonToMove, buttonToAvoid) {
+function moveButtonAvoidingOverlap(buttonToMove) {
     let newX, newY;
     do {
         newX = Math.random() * (window.innerWidth - buttonToMove.offsetWidth);
         newY = Math.random() * (window.innerHeight - buttonToMove.offsetHeight);
-    } while (isOverlapping(newX, newY, buttonToMove.offsetWidth, buttonToMove.offsetHeight, buttonToAvoid.getBoundingClientRect()));
+    } while (isOverlappingAny({x: newX, y: newY}, buttonToMove.offsetWidth, buttonToMove.offsetHeight));
 
     buttonToMove.style.position = 'fixed';
     buttonToMove.style.left = `${newX}px`;
     buttonToMove.style.top = `${newY}px`;
-}
-
-function isOverlapping(x, y, width, height, rectToAvoid) {
-    const newRect = {
-        left: x,
-        top: y,
-        right: x + width,
-        bottom: y + height
-    };
-
-    const avoidRect = rectToAvoid;
-
-    return !(newRect.right < avoidRect.left || 
-             newRect.left > avoidRect.right || 
-             newRect.bottom < avoidRect.top || 
-             newRect.top > avoidRect.bottom);
 }
 
 function changeButtonText(button, messages) {
@@ -108,50 +107,68 @@ function configureYesButton() {
     const yesButton = document.querySelector('#yesButton');
     yesButton.addEventListener('click', function() {
         localStorage.setItem('valentineResponse', 'accepted');
-        updateContainerForValentine();
+        updateContainerForValentine(true);
     });
 }
 
-function updateContainerForValentine() {
+function updateContainerForValentine(isNewAcceptance = false) {
     const container = document.querySelector('.container');
-    const now = new Date();
-    const valentinesDay = new Date(now.getFullYear(), 1, 5); // February 14th
-    if (now > valentinesDay) {
-        valentinesDay.setFullYear(now.getFullYear() + 1);
+    const valentinesDay = new Date('2024-02-04T23:47:00');
+
+    if (isNewAcceptance) {
+        container.innerHTML = `<h1>Thank You!</h1>
+                               <p>You've made me the happiest by accepting to be my Valentine. Looking forward to our beautiful journey together.</p>
+                               <div id="countdown"></div>`;
+    } else {
+        container.innerHTML = `<div id="countdown"></div>`;
     }
-    
-    container.innerHTML = `<h1>Thank You!</h1>
-                           <p>You've made me the happiest by accepting to be my Valentine. Looking forward to our beautiful journey together.</p>
-                           <div id="countdown"></div>`;
 
     const countdown = document.getElementById("countdown");
-    updateCountdown(valentinesDay, countdown);
+    const countdownReached = updateCountdown(valentinesDay, countdown);
 
-    const countdownInterval = setInterval(function() {
-        if (!updateCountdown(valentinesDay, countdown)) {
-            clearInterval(countdownInterval);
-        }
-    }, 1000);
+    if (!countdownReached) {
+        setInterval(function() {
+            updateCountdown(valentinesDay, countdown);
+        }, 1000);
+    }
 }
 
 function updateCountdown(valentinesDay, countdownElement) {
-    const now = new Date().getTime();
-    const distance = valentinesDay.getTime() - now;
+    const now = new Date();
+    const distance = valentinesDay - now;
 
+    // Check if Valentine's Day has been reached or passed
     if (distance < 0) {
         countdownElement.innerHTML = `<h2>Happy Valentine's Day!</h2>
-                                      <p>I love you more than words can say.</p>`;
-        return false;
+                                      <p>I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.I love you more than words can say.</p>`;
+
+        // Use localStorage to check if we've already reloaded for Valentine's Day
+        if (!localStorage.getItem('valentineReloaded')) {
+            // Set a flag to prevent future reloads
+            localStorage.setItem('valentineReloaded', 'true');
+
+            // Wait a bit before reloading to allow users to see the message
+            setTimeout(() => {
+                location.reload();
+            }, 5000); // Delay the refresh for 5 seconds
+        }
+        return true;
+    } else {
+        // Ensure we can reload next year when Valentine's Day comes around again
+        localStorage.removeItem('valentineReloaded');
     }
 
+    // If Valentine's Day hasn't been reached yet, continue showing the countdown
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
     countdownElement.innerHTML = `Countdown to Valentine's Day: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-    return true;
+    return false;
 }
+
+
 
 function checkPreviousResponse() {
     const response = localStorage.getItem('valentineResponse');
