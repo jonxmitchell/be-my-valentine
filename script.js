@@ -12,7 +12,7 @@ function positionHeartsRandomlyAvoidingOverlap() {
     const container = document.querySelector('.container');
     const containerRect = container.getBoundingClientRect();
     // Add a margin to avoid hearts too close to the container
-    const margin = 10;
+    const margin = 50;
     const expandedContainerRect = {
         top: containerRect.top - margin,
         right: containerRect.right + margin,
@@ -113,10 +113,10 @@ function configureYesButton() {
 
 function updateContainerForValentine(isNewAcceptance = false) {
     const container = document.querySelector('.container');
-    const valentinesDay = new Date('2024-02-04T23:47:00');
+    const valentinesDay = new Date('2024-02-14T00:00:00');
 
     if (isNewAcceptance) {
-        container.innerHTML = `<h1>Thank You!</h1>
+        container.innerHTML = `<h1 class="title">Thank You!</h1>
                                <p>You've made me the happiest by accepting to be my Valentine. Looking forward to our beautiful journey together.</p>
                                <div id="countdown"></div>`;
     } else {
